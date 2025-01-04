@@ -87,11 +87,11 @@ def generate_activity_chart(data):
 
 
 
-    # 텍스트 테이블로 출력
-    print("ID\tActivity Count")
-    print("-" * 30)
+    # Markdown 텍스트 테이블로 출력
+    print("| ID\t |Activity Count|")
+    print("|:-------|-------:|")
     for index, row in rank_df_all.iterrows():
-        print(f"{row['user']:<15}{row['activity_count']:>5}")
+        print(f"|{row['user']:<15}|{row['activity_count']:>5}|")
 
     # Plot Bar Chart
     plt.figure(figsize=(10, 6))
