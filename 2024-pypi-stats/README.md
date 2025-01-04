@@ -1,7 +1,14 @@
 ## pypi 의 한글 번역 상태를 가져와서 비쥬얼라이즈해주는 스크립트
 
+pypi 한글 번역은 https://github.com/cpprhtn/pypi-Korean-Translations 를 참조해주세요.  
+warehouse 는 api 호출횟수 제한이 있으므로 API 호출시 살살 해야함. 
+
 - 최다 변역자 10명
-- 연도별 번역횟수 
+- 연도별 번역횟수 ( 최다 번역자 10명 한정 )
+
+
+
+
 
 ## 2024년까지 ID 별 번역회수
 
