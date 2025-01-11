@@ -1,0 +1,30 @@
+## 동영상 X265 로 재인코딩 스크립트
+
+해당 디렉토리의 .mp4 파일들을 ffmpeg 로 x265 로 다시 인코딩한다. 
+
+slow 로 인코딩하므로 cpu 로 동작하지만 매우 느림
+
+새 파일명은 _X265.mp4 가 됨
+
+
+```bash
+uv run x265_convert.py -d /storage/dj/movie/202302-newyork-family-trip
+```
+
+
+## 추후 개선점
+
+- 잘 컨버텅이 되었는지 확인
+  - VMAF 를 이용해서 퀄러티를 측정하면 될듯함. 그러나 n100 머신에게는 멀다.
+- ffmpeg 설치되었는지 확인 
+- cuda 등 디텍트해서 자동 설정
+- recursive 가능하게 
+
+## 참고
+
+- https://transloadit.com/devtips/reducing-video-file-size-with-ffmpeg-for-web-optimization/
+- https://www.tauceti.blog/posts/linux-ffmpeg-amd-5700xt-hardware-video-encoding-hevc-h265-vaapi/
+- https://www.fastpix.io/blog/video-streaming-with-capped-crf
+- https://www.muvi.com/blogs/optimize-ffmpeg-for-fast-video-encoding/
+- VMAF 를 이용해서 퀄러티를 measure https://stackoverflow.com/a/78234869
+- https://www.gumlet.com/learn/ffmpeg-compress-video/
