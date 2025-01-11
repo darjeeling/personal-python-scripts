@@ -14,11 +14,12 @@ uv run x265_convert.py -d /storage/dj/movie/202302-newyork-family-trip
 
 ## 추후 개선점
 
-- 잘 컨버텅이 되었는지 확인
-  - VMAF 를 이용해서 퀄러티를 측정하면 될듯함. 그러나 n100 머신에게는 멀다.
-- ffmpeg 설치되었는지 확인 
-- cuda 등 디텍트해서 자동 설정
-- recursive 가능하게 
+- [x] _X265.mp4 로 끝나면 skip
+- [x] 컨버팅된 파일이 있으면 있는 파일의 duration 을 읽어서 현재 파일과 같은지 확인 필요 
+- [ ] 잘 컨버텅이 되었는지 확인, VMAF 를 이용해서 퀄러티를 측정하면 될듯함. 그러나 n100 머신에게는 멀다.
+- [ ] ffmpeg 설치되었는지 확인 
+- [ ] cuda 등 디텍트해서 자동 설정
+- [ ] recursive 가능하게 
 
 ## 참고
 
