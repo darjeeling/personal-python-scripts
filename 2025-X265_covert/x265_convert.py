@@ -6,6 +6,7 @@
 import argparse
 import subprocess
 from pathlib import Path
+import os
 
 
 def get_video_duration(file_path):
@@ -40,6 +41,7 @@ def process_files(directory):
     for file in mp4_files:
         base_name = file.stem  # 파일명 (확장자 제외)
         new_file = directory / f"{base_name}_X265.mp4"
+
         
         # 새 파일이 이미 존재하는 경우 duration 비교
         if new_file.exists():
@@ -56,18 +58,44 @@ def process_files(directory):
                 print(f"Skipping: {new_file.name} (duration matches or exceeds original)")
                 continue
 
+        # testing commands...
+        # https://gist.github.com/nico-lab/58ac62e359bd63feed36af64db3e4406
+        # -hwaccel qsv -c:v hevc_qsv -extbrc 1 -look_ahead_depth 100
+        #  Using the constant quantization parameter (CQP) by default.
+        #  Please use the global_quality option and other options for a quality-based mode or
+        #  the b option and other options for a bitrate-based mode if the default is not the desired choice.
+
+        #  https://forum.videohelp.com/threads/410216-ffmpeg-newbie-QSV-command#post2696281
+        # "G:\program files\ffmpeg64\bin\ffmpeg.exe" -y -benchmark -init_hw_device qsv=hw -filter_hw_device hw -v verbose ^
+        # -i %1 -pix_fmt nv12 ^
+        # -load_plugin h264_hw -c:v h264_qsv -preset veryslow -global_quality 21 -look_ahead 1 -look_ahead_depth 30 ^
+        # -profile:v high -level:v 4.2 -adaptive_b 1 -rdo 1 -g 30 -colorspace bt709 -color_range tv ^
+        #-acodec copy ^"%~dpn1.h264.qsv.mkv"
         # ffmpeg 명령 실행
+        # /usr/lib/jellyfin-ffmpeg/ffmpeg -hwaccel qsv -c:v hevc_qsv -hwaccel_output_format qsv \
+        #   -global_quality 22 -look_ahead 1 -extbrc -look_ahead_depth 99 -preset veryslow -c:a copy \
+        #  -i input
         command = [
-            "ffmpeg",
+            "/usr/lib/jellyfin-ffmpeg/ffmpeg",
+            "-hwaccel", "qsv",
+            "-c:v", "hevc_qsv",
+            "-hwaccel_output_format", "qsv",
             "-i", str(file),
-            "-c:v", "libx265",
+            "-global_quality","22",
+            "-look_ahead","1",
             "-preset", "slow",
+            "-tag:v", "hvc1",
+            "-movflags", "+faststart",
             "-c:a", "copy",
             str(new_file)
         ]
         try:
             print(f"Processing: {file.name} -> {new_file.name}")
             subprocess.run(command, check=True)
+            # 원본 파일의 수정일 가져오기
+            original_mtime = file.stat().st_mtime
+            # 새 파일의 수정일을 원본 파일의 수정일로 설정
+            os.utime(new_file, (original_mtime, original_mtime))
         except subprocess.CalledProcessError as e:
             print(f"Error processing {file.name}: {e}")
 
